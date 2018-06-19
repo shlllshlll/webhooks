@@ -5,5 +5,12 @@
         "branch": "master",
         "remote": "origin/master",
         "force": 1
+    },
+    "keyvisual": {
+        "path": "/home/shlll/project/keyvisual",
+        "ref": "refs/heads/master",
+        "branch": "master",
+        "remote": "origin/master",
+        "force": 0
     }
 }

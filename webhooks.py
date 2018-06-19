@@ -3,7 +3,7 @@
 # @Email: shlll7347@gmail.com
 # @Date:   2018-06-17 15:07:16
 # @Last Modified by:   SHLLL
-# @Last Modified time: 2018-06-19 11:45:32
+# @Last Modified time: 2018-06-20 01:59:54
 # @License: MIT LICENSE
 
 import json
@@ -15,7 +15,8 @@ from git import Repo
 
 urls = (
     '/', 'index',
-    '/blog', 'blog'
+    '/blog', 'blog',
+    '/keyvisual', 'keyvisual'
 )
 
 app = web.application(urls, globals())
@@ -48,24 +49,37 @@ class index(object):
         return render.index('', '', '')
 
 
-class blog(object):
-    data = ''
-    thread_stat = {'stat': 0, 'time': None}
+class WebhookBase(object):
+    @classmethod
+    def GET(cls):
+        return render.index(cls.message, cls.thread_stat, cls.data)
 
-    def GET(self):
-        return render.index('博客系统Webhook服务器运行中', self.thread_stat, self.data)
-
-    def POST(self):
-        blog.data = web.data().decode()
-        data_dict = json.loads(blog.data)
-        if data_dict['ref'] == config['blog']['ref']:
+    @classmethod
+    def POST(cls):
+        cls.data = web.data().decode()
+        data_dict = json.loads(cls.data)
+        if data_dict['ref'] == cls.conf['ref']:
             git_thread = threading.Thread(
                 target=git_pull_in_thread,
-                args=(config['blog'], blog.thread_stat,),
+                args=(cls.conf, cls.thread_stat,),
                 name="BlogGitThread")
             git_thread.setDaemon(True)
             git_thread.start()
         return 'Done.'
+
+
+class blog(WebhookBase):
+    data = ''
+    thread_stat = {'stat': 0, 'time': None}
+    message = '博客系统Webhook服务器运行中'
+    conf = config['blog']
+
+
+class keyvisual(WebhookBase):
+    data = ''
+    thread_stat = {'stat': 0, 'time': None}
+    message = '基于垂直搜索引擎的关联关键词可视化系统Webhook服务器运行中'
+    conf = config['keyvisual']
 
 
 if __name__ == "__main__":
