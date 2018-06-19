@@ -1,6 +1,7 @@
 __pycache__/
 /.idea
 /.venv
+/test
 /.ipynb_checkpoints
 *.sublime-workspace
 *.sublime-project

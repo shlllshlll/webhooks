@@ -1,5 +1,9 @@
 {
     "blog": {
-        "path": "/home/shlll/project/blog/shlllshlll.github.io/"
+        "path": "/home/shlll/project/blog/shlllshlll.github.io",
+        "ref": "refs/heads/master",
+        "branch": "master",
+        "remote": "origin/master",
+        "force": 1
     }
 }

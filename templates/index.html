@@ -20,11 +20,13 @@ $def with (message, status, data)
                 <p style="color:red;">WebHook同步正在进行中</p>
             $else:
                 <p style="color:red;">WebHook同步完成，上次同步时间：$status['time']</p>
-
-        $if data:
-            <p style="color:yellow;">调试信息：</p>
-            <p style="color:yellow;">$data</p>
     </center>
+
+    $if data:
+        <details>
+            <summary style="color:red;">调试信息：</summary>
+            <p style="color:blue;">$data</p>
+        </details>
     <hr>
     <center>&copy; SHLLL 2018</center>
 </body>
