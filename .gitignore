@@ -3,6 +3,8 @@ __pycache__/
 /.venv
 /test
 /.ipynb_checkpoints
+/ipynb
 *.sublime-workspace
 *.sublime-project
+Pipfile.lock
 sftp-config.json

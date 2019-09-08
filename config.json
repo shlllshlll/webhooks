@@ -1,16 +1,18 @@
 {
     "blog": {
+        "message": "博客系统Webhook服务器运行中",
         "path": "/home/shlll/project/blog/shlllshlll.github.io",
-        "ref": "refs/heads/master",
         "branch": "master",
         "remote": "origin/master",
-        "force": 1
+        "force": true,
+        "test_mode": true
     },
-    "keyvisual": {
-        "path": "/home/shlll/project/keyvisual",
-        "ref": "refs/heads/master",
-        "branch": "master",
-        "remote": "origin/master",
-        "force": 0
+    "arrangement": {
+        "message": "排班系统WebHook服务器运行中",
+        "path": "/home/shlll/project/Arrangement",
+        "branch": "dev",
+        "remote": "origin/dev",
+        "force": false,
+        "test_mode": true
     }
 }

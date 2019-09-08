@@ -2,8 +2,8 @@
 # @Author: SHLLL
 # @Email: shlll7347@gmail.com
 # @Date:   2018-06-17 15:07:16
-# @Last Modified by:   SHLLL
-# @Last Modified time: 2018-06-20 01:59:54
+# @Last Modified by:   Mr.Shi
+# @Last Modified time: 2019-09-08 02:15:48
 # @License: MIT LICENSE
 
 import json
@@ -13,15 +13,9 @@ import web
 from git import Repo
 
 
-urls = (
-    '/', 'index',
-    '/blog', 'blog',
-    '/keyvisual', 'keyvisual'
-)
-
-app = web.application(urls, globals())
-application = app.wsgifunc()
-render = web.template.render("templates/")
+urls = [
+    '/', 'index'
+]
 
 with open('config.json', 'r') as config_j:
     config = json.load(config_j)
@@ -29,16 +23,21 @@ with open('config.json', 'r') as config_j:
 
 def git_pull_in_thread(config, stat):
     stat['stat'] = 1
-    repo = Repo(config['path'])
-    repo.heads[config['branch']].checkout()
-    if config['force']:
-        git = repo.git
-        git.fetch('--all')
-        git.reset('--hard', 'origin/master')
-        git.pull()
+
+    if config['test_mode']:
+        print('Start to fetch git.')
     else:
-        origin = repo.remote()
-        origin.pull()
+        repo = Repo(config['path'])
+        repo.heads[config['branch']].checkout()
+
+        if config['force']:
+            git = repo.git
+            git.fetch('--all')
+            git.reset('--hard', config["remote"])
+            git.pull()
+        else:
+            origin = repo.remote()
+            origin.pull()
     stat['time'] = time.strftime(
         '%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
     stat['stat'] = 2
@@ -50,9 +49,12 @@ class index(object):
 
 
 class WebhookBase(object):
+    data = ''
+    thread_stat = {'stat': 0, 'time': None}
+
     @classmethod
     def GET(cls):
-        return render.index(cls.message, cls.thread_stat, cls.data)
+        return render.index(cls.conf['message'], cls.thread_stat, cls.data)
 
     @classmethod
     def POST(cls):
@@ -68,19 +70,13 @@ class WebhookBase(object):
         return 'Done.'
 
 
-class blog(WebhookBase):
-    data = ''
-    thread_stat = {'stat': 0, 'time': None}
-    message = '博客系统Webhook服务器运行中'
-    conf = config['blog']
+for key in config.keys():
+    urls.extend([f'/{key}', key])
+    locals()[key] = type(key, (WebhookBase,), {'conf': config[key]})
 
-
-class keyvisual(WebhookBase):
-    data = ''
-    thread_stat = {'stat': 0, 'time': None}
-    message = '基于垂直搜索引擎的关联关键词可视化系统Webhook服务器运行中'
-    conf = config['keyvisual']
-
+app = web.application(urls, globals())
+application = app.wsgifunc()
+render = web.template.render("templates/")
 
 if __name__ == "__main__":
     app.run()

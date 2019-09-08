@@ -1,15 +1,17 @@
 [[source]]
-url = "https://pypi.org/simple"
+url = "https://mirrors.aliyun.com/pypi/simple"
 verify_ssl = true
 name = "pypi"
 
 [packages]
-"web.py" = "==0.40-dev1"
+"web.py" = {git = "https://github.com/webpy/webpy.git"}
 gitpython = "*"
 
 [dev-packages]
 ipython = "*"
 ipdb = "*"
+jupyter = "*"
+jupyterlab = "*"
 
 [requires]
 python_version = "3.6"
